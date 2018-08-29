@@ -10,22 +10,42 @@ namespace SortAlgo
     {
         static void Main(string[] args)
         {
+            // Difinition of test functions
+            Dictionary<string, Action> funcMap =
+                new Dictionary<string, Action>()
+                {
+                    { "Babble 500", Bind(SortAlgos.BabbleSort, 500) },
+                    { "Babble 5000", Bind(SortAlgos.BabbleSort, 5000) }
+                };
+
+            // Test following the above difinition.
             MeasureFunction mf = new MeasureFunction();
-
-            mf.Run(TestFunc);
-            mf.Run(TestFunc);
-            mf.Run(TestFunc);
-            mf.Run(TestFunc);
-            mf.Run(TestFunc);
-
-            foreach (long elapsedTime in mf.ElapsedTimes)
+            foreach(KeyValuePair<string, Action> pair in funcMap)
             {
-                Console.WriteLine("ElapsedTime is " + elapsedTime);
+                mf.Run(pair.Value);
+
+                Console.WriteLine($"Target = {pair.Key}:");
+                foreach (int elapsedTime in mf.ElapsedTimes)
+                {
+                    Console.WriteLine($"ElapsedTime is {elapsedTime} [ms]");
+                }
+                Console.WriteLine($"Average is {mf.ElapsedTimeAve} [ms]");
+
+                mf.Reset();
+                Console.WriteLine("----------");
             }
 
             Console.Read();
         }
 
+        private static Action Bind(Action<int> action, int param)
+        {
+            return () => action(param);
+        }
+
+        /// <summary>
+        /// It takes about 500ms.
+        /// </summary>
         private static void TestFunc()
         {
             Random random = new Random();
@@ -38,18 +58,37 @@ namespace SortAlgo
 
     class MeasureFunction
     {
-        public List<long> ElapsedTimes { get; private set; } = new List<long>();
+        public int Repeat { get; set; } = 5;
+
+        public List<long> ElapsedTimes
+        {
+            get;
+            private set;
+        } = new List<long>();
+
+        public double ElapsedTimeAve
+        {
+            get { return ElapsedTimes.Average(); }
+        }
 
         public void Run(Action func)
         {
             System.Diagnostics.Stopwatch sw
                 = new System.Diagnostics.Stopwatch();
-            sw.Start();
 
-            func();
+            for (int i = 0; i < Repeat; i++)
+            {
+                sw.Start();
+                func();
+                sw.Stop();
+                ElapsedTimes.Add(sw.ElapsedMilliseconds);
+                sw.Reset();
+            }
+        }
 
-            sw.Stop();
-            ElapsedTimes.Add(sw.ElapsedMilliseconds);
+        public void Reset()
+        {
+            ElapsedTimes = new List<long>();
         }
     }
 }
