@@ -10,16 +10,22 @@ namespace SortAlgo
     {
         static void Main(string[] args)
         {
+            MeasureFunction mf = new MeasureFunction();
+
             // Difinition of test functions
             Dictionary<string, Action> funcMap =
                 new Dictionary<string, Action>()
                 {
                     { "Babble 500", Bind(SortAlgos.BabbleSort, 500) },
-                    { "Babble 5000", Bind(SortAlgos.BabbleSort, 5000) }
+                    { "Babble 5000", Bind(SortAlgos.BabbleSort, 5000) },
+                    { "Babble2 500", Bind(SortAlgos.BabbleSort2, 500) },
+                    { "Babble2 5000", Bind(SortAlgos.BabbleSort2, 5000) },
                 };
 
+            mf.Repeat = 300;
+
             // Test following the above difinition.
-            MeasureFunction mf = new MeasureFunction();
+            List<double> results = new List<double>();
             foreach(KeyValuePair<string, Action> pair in funcMap)
             {
                 mf.Run(pair.Value);
@@ -30,9 +36,15 @@ namespace SortAlgo
                     Console.WriteLine($"ElapsedTime is {elapsedTime} [ms]");
                 }
                 Console.WriteLine($"Average is {mf.ElapsedTimeAve} [ms]");
+                results.Add(mf.ElapsedTimeAve);
 
                 mf.Reset();
                 Console.WriteLine("----------");
+            }
+
+            for(int i=0; i< results.Count; i++)
+            {
+                Console.WriteLine($"{funcMap.Keys.ToArray()[i]} : {results[i]} [ms]");
             }
 
             Console.Read();
