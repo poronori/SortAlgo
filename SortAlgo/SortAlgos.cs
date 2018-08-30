@@ -8,6 +8,16 @@ namespace SortAlgo
 {
     class SortAlgos
     {
+        public static void LinqSort(int numOfElem)
+        {
+            var list = GetRandomList(numOfElem);
+
+            // Sort elements
+            list.Sort();
+
+            CheckListElements(list);
+        }
+
         /// <summary>
         /// Bubble sort O(n^2)
         /// </summary>
@@ -71,6 +81,19 @@ namespace SortAlgo
                     break;
                 }
             }
+            CheckListElements(list);
+        }
+
+        /// <summary>
+        /// Selection sort O(n^2)
+        /// </summary>
+        /// <param name="numOfElem"></param>
+        public static void SelectionSort(int numOfElem)
+        {
+            var list = GetRandomList(numOfElem);
+
+            // Sort elements
+
             CheckListElements(list);
         }
 

@@ -16,13 +16,14 @@ namespace SortAlgo
             Dictionary<string, Action> funcMap =
                 new Dictionary<string, Action>()
                 {
+                    // ##### TODO: try to run these parallelly
+                    { "Linq 500", Bind(SortAlgos.BabbleSort, 500) },
+                    { "Linq 5000", Bind(SortAlgos.BabbleSort, 5000) },
                     { "Babble 500", Bind(SortAlgos.BabbleSort, 500) },
                     { "Babble 5000", Bind(SortAlgos.BabbleSort, 5000) },
                     { "Babble2 500", Bind(SortAlgos.BabbleSort2, 500) },
                     { "Babble2 5000", Bind(SortAlgos.BabbleSort2, 5000) },
                 };
-
-            mf.Repeat = 300;
 
             // Test following the above difinition.
             List<double> results = new List<double>();
@@ -54,53 +55,20 @@ namespace SortAlgo
         {
             return () => action(param);
         }
+    }
 
+    class Test
+    {
         /// <summary>
         /// It takes about 500ms.
         /// </summary>
         private static void TestFunc()
         {
             Random random = new Random();
-            for (int i=0; i<10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 System.Threading.Thread.Sleep(random.Next(0, 100));
             }
-        }
-    }
-
-    class MeasureFunction
-    {
-        public int Repeat { get; set; } = 5;
-
-        public List<long> ElapsedTimes
-        {
-            get;
-            private set;
-        } = new List<long>();
-
-        public double ElapsedTimeAve
-        {
-            get { return ElapsedTimes.Average(); }
-        }
-
-        public void Run(Action func)
-        {
-            System.Diagnostics.Stopwatch sw
-                = new System.Diagnostics.Stopwatch();
-
-            for (int i = 0; i < Repeat; i++)
-            {
-                sw.Start();
-                func();
-                sw.Stop();
-                ElapsedTimes.Add(sw.ElapsedMilliseconds);
-                sw.Reset();
-            }
-        }
-
-        public void Reset()
-        {
-            ElapsedTimes = new List<long>();
         }
     }
 }
