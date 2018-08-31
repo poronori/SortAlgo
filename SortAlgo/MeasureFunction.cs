@@ -23,17 +23,24 @@ namespace SortAlgo
 
         public void Run(Action func)
         {
-            System.Diagnostics.Stopwatch sw
-                = new System.Diagnostics.Stopwatch();
+            List<Task> tasks = new List<Task>();
 
             for (int i = 0; i < Repeat; i++)
             {
-                sw.Start();
-                func();
-                sw.Stop();
-                ElapsedTimes.Add(sw.ElapsedMilliseconds);
-                sw.Reset();
+                tasks.Add(new Task(
+                () => {
+                    System.Diagnostics.Stopwatch sw
+                        = new System.Diagnostics.Stopwatch();
+
+                    sw.Start();
+                    func();
+                    sw.Stop();
+                    ElapsedTimes.Add(sw.ElapsedMilliseconds);
+                }));
+                tasks.Last().Start();
             }
+
+            tasks.ForEach(task => task.Wait());
         }
 
         public void Reset()

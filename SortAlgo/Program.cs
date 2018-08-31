@@ -17,12 +17,18 @@ namespace SortAlgo
                 new Dictionary<string, Action>()
                 {
                     // ##### TODO: try to run these parallelly
-                    { "Linq 500", Bind(SortAlgos.BabbleSort, 500) },
-                    { "Linq 5000", Bind(SortAlgos.BabbleSort, 5000) },
-                    { "Babble 500", Bind(SortAlgos.BabbleSort, 500) },
-                    { "Babble 5000", Bind(SortAlgos.BabbleSort, 5000) },
-                    { "Babble2 500", Bind(SortAlgos.BabbleSort2, 500) },
-                    { "Babble2 5000", Bind(SortAlgos.BabbleSort2, 5000) },
+                    { "Linq 100", Bind(SortAlgos.BabbleSort, 100) },
+                    { "Linq 1000", Bind(SortAlgos.BabbleSort, 1000) },
+                    { "Linq 10000", Bind(SortAlgos.BabbleSort, 10000) },
+                    { "Babble 100", Bind(SortAlgos.BabbleSort, 100) },
+                    { "Babble 1000", Bind(SortAlgos.BabbleSort, 1000) },
+                    { "Babble 10000", Bind(SortAlgos.BabbleSort, 10000) },
+                    { "Babble2 100", Bind(SortAlgos.BabbleSort2, 100) },
+                    { "Babble2 1000", Bind(SortAlgos.BabbleSort2, 1000) },
+                    { "Babble2 10000", Bind(SortAlgos.BabbleSort2, 10000) },
+                    { "Selection 100", Bind(SortAlgos.SelectionSort, 100) },
+                    { "Selection 1000", Bind(SortAlgos.SelectionSort, 1000) },
+                    { "Selection 10000", Bind(SortAlgos.SelectionSort, 10000) },
                 };
 
             // Test following the above difinition.
@@ -31,34 +37,39 @@ namespace SortAlgo
             {
                 mf.Run(pair.Value);
 
-                Console.WriteLine($"Target = {pair.Key}:");
+                Test.Log($"Target = {pair.Key}:");
                 foreach (int elapsedTime in mf.ElapsedTimes)
                 {
-                    Console.WriteLine($"ElapsedTime is {elapsedTime} [ms]");
+                    Test.Log($"ElapsedTime is {elapsedTime} [ms]");
                 }
-                Console.WriteLine($"Average is {mf.ElapsedTimeAve} [ms]");
+                Test.Log($"Average is {mf.ElapsedTimeAve} [ms]");
                 results.Add(mf.ElapsedTimeAve);
 
                 mf.Reset();
-                Console.WriteLine("----------");
+                Test.Log("----------");
             }
 
+            // Show results
             for(int i=0; i< results.Count; i++)
             {
                 Console.WriteLine($"{funcMap.Keys.ToArray()[i]} : {results[i]} [ms]");
             }
 
+            // Wait for a user input.
             Console.Read();
         }
 
-        private static Action Bind(Action<int> action, int param)
-        {
-            return () => action(param);
-        }
+        // Bind action and parameter
+        private static Func<Action<int>, int, Action> Bind
+            = (action, param) => (() => action(param));
     }
 
+    // class for testing
     class Test
     {
+        public static Action<string> Log
+            = (message) => { if (true) Console.WriteLine(message); };
+
         /// <summary>
         /// It takes about 500ms.
         /// </summary>

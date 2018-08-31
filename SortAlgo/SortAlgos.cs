@@ -8,6 +8,10 @@ namespace SortAlgo
 {
     class SortAlgos
     {
+        /// <summary>
+        /// Linq Sort
+        /// </summary>
+        /// <param name="numOfElem"></param>
         public static void LinqSort(int numOfElem)
         {
             var list = GetRandomList(numOfElem);
@@ -93,10 +97,29 @@ namespace SortAlgo
             var list = GetRandomList(numOfElem);
 
             // Sort elements
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                int maxIndex = -1;
+                int max = Int32.MinValue;
+                for (int j = 0; j <= i; j++)
+                {
+                    if (list[j] > max)
+                    {
+                        max = list[j];
+                        maxIndex = j;
+                    }
+                }
+                SwapListElements(ref list, i, maxIndex);
+            }
 
             CheckListElements(list);
         }
 
+        /// <summary>
+        /// Create random element list and return it.
+        /// </summary>
+        /// <param name="numOfElem">the number of elements</param>
+        /// <returns>created list</returns>
         private static List<int> GetRandomList(int numOfElem)
         {
             Random rand = new Random();
@@ -118,6 +141,10 @@ namespace SortAlgo
             return list;
         }
 
+        /// <summary>
+        /// Show elements as one line.
+        /// </summary>
+        /// <param name="list">target list</param>
         private static void ShowListElements(List<int> list)
         {
             string output = list.Aggregate("", (str, elem) => $"{str}, {elem}");
@@ -125,6 +152,10 @@ namespace SortAlgo
             Console.WriteLine($"result = {output}");
         }
 
+        /// <summary>
+        /// Check if elements is sorted correctly.
+        /// </summary>
+        /// <param name="list">target list</param>
         private static void CheckListElements(List<int> list)
         {
             bool result = true;
@@ -136,9 +167,15 @@ namespace SortAlgo
                     break;
                 }
             }
-            Console.WriteLine(result ? "OK" : "NG");
+            Test.Log(result ? "OK" : "NG");
         }
 
+        /// <summary>
+        /// Swap elements of the given list.
+        /// </summary>
+        /// <param name="list">target list</param>
+        /// <param name="index1">index</param>
+        /// <param name="index2">another index</param>
         private static void SwapListElements(ref List<int> list, int index1, int index2)
         {
             int temp = list[index1];
