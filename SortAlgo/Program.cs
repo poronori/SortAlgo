@@ -23,14 +23,17 @@ namespace SortAlgo
                     { "Babble 100", Bind(SortAlgos.BabbleSort, 100) },
                     { "Babble 1000", Bind(SortAlgos.BabbleSort, 1000) },
                     { "Babble 10000", Bind(SortAlgos.BabbleSort, 10000) },
-                    { "Babble2 100", Bind(SortAlgos.BabbleSort2, 100) },
-                    { "Babble2 1000", Bind(SortAlgos.BabbleSort2, 1000) },
-                    { "Babble2 10000", Bind(SortAlgos.BabbleSort2, 10000) },
+                    { "Shaker 100", Bind(SortAlgos.ShakerSort, 100) },
+                    { "Shaker 1000", Bind(SortAlgos.ShakerSort, 1000) },
+                    { "Shaker 10000", Bind(SortAlgos.ShakerSort, 10000) },
+                    { "Comb 100", Bind(SortAlgos.CombSort, 100) },
+                    { "Comb 1000", Bind(SortAlgos.CombSort, 1000) },
+                    { "Comb 10000", Bind(SortAlgos.CombSort, 10000) },
                     { "Selection 100", Bind(SortAlgos.SelectionSort, 100) },
                     { "Selection 1000", Bind(SortAlgos.SelectionSort, 1000) },
                     { "Selection 10000", Bind(SortAlgos.SelectionSort, 10000) },
                 };
-
+            
             // Test following the above difinition.
             List<double> results = new List<double>();
             foreach(KeyValuePair<string, Action> pair in funcMap)
@@ -58,7 +61,7 @@ namespace SortAlgo
             // Wait for a user input.
             Console.Read();
         }
-
+        
         // Bind action and parameter
         private static Func<Action<int>, int, Action> Bind
             = (action, param) => (() => action(param));
