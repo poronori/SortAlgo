@@ -134,6 +134,43 @@ namespace SortAlgo
         }
 
         /// <summary>
+        /// Comb sort O(n^2)
+        /// </summary>
+        /// <param name="numOfElem"></param>
+        public static void CombSort(int numOfElem)
+        {
+            var list = GetRandomList(numOfElem);
+
+            // Sort elements
+            int h = numOfElem * 10 / 13;   // first h is n/1.3
+            while (true)
+            {
+                bool isFinished = true;
+
+                for (int i = 0; i < numOfElem - h; i++)
+                {
+                    if (list[i] > list[i + h])
+                    {
+                        SwapListElements(ref list, i, i + h);
+                        isFinished = false;
+                    }
+                }
+
+                if (h != 1)
+                {
+                    // h /= 1.3 unless h == 1
+                    h = h * 10 / 13;
+                }
+                else if (isFinished)
+                {
+                    // finishing sorting
+                    break;
+                }
+            }
+            CheckListElements(list);
+        }
+
+        /// <summary>
         /// Selection sort O(n^2)
         /// </summary>
         /// <param name="numOfElem"></param>
