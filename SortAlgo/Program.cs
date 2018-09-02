@@ -17,21 +17,24 @@ namespace SortAlgo
                 new Dictionary<string, Action>()
                 {
                     // ##### TODO: try to run these parallelly
-                    { "Linq 100", Bind(SortAlgos.BabbleSort, 100) },
-                    { "Linq 1000", Bind(SortAlgos.BabbleSort, 1000) },
-                    { "Linq 10000", Bind(SortAlgos.BabbleSort, 10000) },
-                    { "Babble 100", Bind(SortAlgos.BabbleSort, 100) },
-                    { "Babble 1000", Bind(SortAlgos.BabbleSort, 1000) },
-                    { "Babble 10000", Bind(SortAlgos.BabbleSort, 10000) },
-                    { "Shaker 100", Bind(SortAlgos.ShakerSort, 100) },
-                    { "Shaker 1000", Bind(SortAlgos.ShakerSort, 1000) },
-                    { "Shaker 10000", Bind(SortAlgos.ShakerSort, 10000) },
-                    { "Comb 100", Bind(SortAlgos.CombSort, 100) },
-                    { "Comb 1000", Bind(SortAlgos.CombSort, 1000) },
-                    { "Comb 10000", Bind(SortAlgos.CombSort, 10000) },
-                    { "Selection 100", Bind(SortAlgos.SelectionSort, 100) },
-                    { "Selection 1000", Bind(SortAlgos.SelectionSort, 1000) },
-                    { "Selection 10000", Bind(SortAlgos.SelectionSort, 10000) },
+                    { "Linq 100", BindChecking(SortAlgos.BabbleSort, 100) },
+                    { "Linq 1000", BindChecking(SortAlgos.BabbleSort, 1000) },
+                    { "Linq 10000", BindChecking(SortAlgos.BabbleSort, 10000) },
+                    { "Babble 100", BindChecking(SortAlgos.BabbleSort, 100) },
+                    { "Babble 1000", BindChecking(SortAlgos.BabbleSort, 1000) },
+                    { "Babble 10000", BindChecking(SortAlgos.BabbleSort, 10000) },
+                    { "Shaker 100", BindChecking(SortAlgos.ShakerSort, 100) },
+                    { "Shaker 1000", BindChecking(SortAlgos.ShakerSort, 1000) },
+                    { "Shaker 10000", BindChecking(SortAlgos.ShakerSort, 10000) },
+                    { "Comb 100", BindChecking(SortAlgos.CombSort, 100) },
+                    { "Comb 1000", BindChecking(SortAlgos.CombSort, 1000) },
+                    { "Comb 10000", BindChecking(SortAlgos.CombSort, 10000) },
+                    { "Selection 100", BindChecking(SortAlgos.SelectionSort, 100) },
+                    { "Selection 1000", BindChecking(SortAlgos.SelectionSort, 1000) },
+                    { "Selection 10000", BindChecking(SortAlgos.SelectionSort, 10000) },
+                    { "Insertion 100", BindChecking(SortAlgos.InsertionSort, 100) },
+                    { "Insertion 1000", BindChecking(SortAlgos.InsertionSort, 1000) },
+                    { "Insertion 10000", BindChecking(SortAlgos.InsertionSort, 10000) },
                 };
             
             // Test following the above difinition.
@@ -63,8 +66,9 @@ namespace SortAlgo
         }
         
         // Bind action and parameter
-        private static Func<Action<int>, int, Action> Bind
-            = (action, param) => (() => action(param));
+        // CheckFunc, SortFunc, numOfElem
+        private static Func<Func<List<int>, List<int>>, int, Action> BindChecking
+            = (list, param) => (() => SortAlgos.CheckSortAlgo(list, param));
     }
 
     // class for testing
