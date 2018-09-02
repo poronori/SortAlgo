@@ -200,14 +200,16 @@ namespace SortAlgo
             for (int i = 1; i < list.Count; i++)
             {
                 // Insert the current item into its appropreate position of already checked items
-                for (int j = i; j > 0; j--)
+                int currentItem = list[i];
+                for (int j = i; j >= 0; j--)
                 {
-                    if (list[j] < list[j - 1])
+                    if (j != 0 && currentItem < list[j - 1])
                     {
-                        SwapListElements(ref list, j, j - 1);
+                        list[j] = list[j - 1];
                     }
                     else
                     {
+                        list[j] = currentItem;
                         break;
                     }
                 }
@@ -215,7 +217,7 @@ namespace SortAlgo
             return list;
         }
 
-        #endregion
+        #endregion 
 
         #region Utils
 
