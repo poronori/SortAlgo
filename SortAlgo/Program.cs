@@ -6,40 +6,51 @@ using System.Threading.Tasks;
 
 namespace SortAlgo
 {
+    using FuncType = Dictionary<string, Action>;
+
     class Program
     {
         static void Main(string[] args)
         {
+            // Difinition of test functions
+            var funcMap = new FuncType() {
+                { "Linq 100", BindChecking(SortAlgos.BabbleSort, 100) },
+                { "Linq 1000", BindChecking(SortAlgos.BabbleSort, 1000) },
+                { "Linq 10000", BindChecking(SortAlgos.BabbleSort, 10000) },
+                { "Babble 100", BindChecking(SortAlgos.BabbleSort, 100) },
+                { "Babble 1000", BindChecking(SortAlgos.BabbleSort, 1000) },
+                { "Babble 10000", BindChecking(SortAlgos.BabbleSort, 10000) },
+                { "Shaker 100", BindChecking(SortAlgos.ShakerSort, 100) },
+                { "Shaker 1000", BindChecking(SortAlgos.ShakerSort, 1000) },
+                { "Shaker 10000", BindChecking(SortAlgos.ShakerSort, 10000) },
+                { "Comb 100", BindChecking(SortAlgos.CombSort, 100) },
+                { "Comb 1000", BindChecking(SortAlgos.CombSort, 1000) },
+                { "Comb 10000", BindChecking(SortAlgos.CombSort, 10000) },
+                { "Selection 100", BindChecking(SortAlgos.SelectionSort, 100) },
+                { "Selection 1000", BindChecking(SortAlgos.SelectionSort, 1000) },
+                { "Selection 10000", BindChecking(SortAlgos.SelectionSort, 10000) },
+                { "Insertion 100", BindChecking(SortAlgos.InsertionSort, 100) },
+                { "Insertion 1000", BindChecking(SortAlgos.InsertionSort, 1000) },
+                { "Insertion 10000", BindChecking(SortAlgos.InsertionSort, 10000) },
+            };
+
+            MeasureFuncs(funcMap, out List<double> results);
+            ShowResult(funcMap, results);
+
+            // Wait for a user input.
+            Console.Read();
+        }
+
+        /// <summary>
+        /// Measure times of running each function
+        /// </summary>
+        /// <returns></returns>
+        private static void MeasureFuncs(FuncType funcMap, out List<double> results)
+        {
             MeasureFunction mf = new MeasureFunction();
 
-            // Difinition of test functions
-            Dictionary<string, Action> funcMap =
-                new Dictionary<string, Action>()
-                {
-                    // ##### TODO: try to run these parallelly
-                    { "Linq 100", BindChecking(SortAlgos.BabbleSort, 100) },
-                    { "Linq 1000", BindChecking(SortAlgos.BabbleSort, 1000) },
-                    { "Linq 10000", BindChecking(SortAlgos.BabbleSort, 10000) },
-                    { "Babble 100", BindChecking(SortAlgos.BabbleSort, 100) },
-                    { "Babble 1000", BindChecking(SortAlgos.BabbleSort, 1000) },
-                    { "Babble 10000", BindChecking(SortAlgos.BabbleSort, 10000) },
-                    { "Shaker 100", BindChecking(SortAlgos.ShakerSort, 100) },
-                    { "Shaker 1000", BindChecking(SortAlgos.ShakerSort, 1000) },
-                    { "Shaker 10000", BindChecking(SortAlgos.ShakerSort, 10000) },
-                    { "Comb 100", BindChecking(SortAlgos.CombSort, 100) },
-                    { "Comb 1000", BindChecking(SortAlgos.CombSort, 1000) },
-                    { "Comb 10000", BindChecking(SortAlgos.CombSort, 10000) },
-                    { "Selection 100", BindChecking(SortAlgos.SelectionSort, 100) },
-                    { "Selection 1000", BindChecking(SortAlgos.SelectionSort, 1000) },
-                    { "Selection 10000", BindChecking(SortAlgos.SelectionSort, 10000) },
-                    { "Insertion 100", BindChecking(SortAlgos.InsertionSort, 100) },
-                    { "Insertion 1000", BindChecking(SortAlgos.InsertionSort, 1000) },
-                    { "Insertion 10000", BindChecking(SortAlgos.InsertionSort, 10000) },
-                };
-            
-            // Test following the above difinition.
-            List<double> results = new List<double>();
-            foreach(KeyValuePair<string, Action> pair in funcMap)
+            results = new List<double>();
+            foreach (var pair in funcMap)
             {
                 mf.Run(pair.Value);
 
@@ -54,15 +65,26 @@ namespace SortAlgo
                 mf.Reset();
                 Test.Log("----------");
             }
+        }
 
-            // Show results
-            for(int i=0; i< results.Count; i++)
+        /// <summary>
+        /// Show result with good format
+        /// </summary>
+        /// <param name="results">list for showing</param>
+        private static void ShowResult(FuncType funcMap, List<double> results)
+        {
+            for (int i = 0; i < results.Count; i++)
             {
-                Console.WriteLine($"{funcMap.Keys.ToArray()[i]} : {results[i]} [ms]");
-            }
+                int maxKeyLen = funcMap.Keys.Max((key) => key.Count());
+                string result
+                    = ($"{funcMap.Keys.ToArray()[i]}").PadRight(maxKeyLen)
+                    + " :"
+                    + ($"{results[i]:F1} [ms]").PadLeft(13);
+                Console.Write(result + " |");
 
-            // Wait for a user input.
-            Console.Read();
+                int count = Math.Max((int)Math.Log(results[i], 1.2), 0);
+                Console.WriteLine(("").PadLeft(count, '#'));
+            }
         }
         
         // Bind action and parameter
