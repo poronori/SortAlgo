@@ -21,6 +21,11 @@ namespace SortAlgo
             get { return ElapsedTimes.Average(); }
         }
 
+        public long ElapsedTimeMax
+        {
+            get { return ElapsedTimes.Max(); }
+        }
+
         public void Run(Action func)
         {
             List<Task> tasks = new List<Task>();

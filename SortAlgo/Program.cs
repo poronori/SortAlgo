@@ -34,7 +34,7 @@ namespace SortAlgo
                 { "Insertion 10000", BindChecking(SortAlgos.InsertionSort, 10000) },
             };
 
-            MeasureFuncs(funcMap, out List<double> results);
+            MeasureFuncs(funcMap, out List<Tuple<double, long>> results);
             ShowResult(funcMap, results);
 
             // Wait for a user input.
@@ -44,12 +44,13 @@ namespace SortAlgo
         /// <summary>
         /// Measure times of running each function
         /// </summary>
-        /// <returns></returns>
-        private static void MeasureFuncs(FuncType funcMap, out List<double> results)
+        /// <param name="funcMap">functions map</param>
+        /// <param name="results">result list including average and max time</param>
+        private static void MeasureFuncs(FuncType funcMap, out List<Tuple<double, long>> results)
         {
             MeasureFunction mf = new MeasureFunction();
 
-            results = new List<double>();
+            results = new List<Tuple<double, long>>();
             foreach (var pair in funcMap)
             {
                 mf.Run(pair.Value);
@@ -60,7 +61,7 @@ namespace SortAlgo
                     Test.Log($"ElapsedTime is {elapsedTime} [ms]");
                 }
                 Test.Log($"Average is {mf.ElapsedTimeAve} [ms]");
-                results.Add(mf.ElapsedTimeAve);
+                results.Add(new Tuple<double, long>(mf.ElapsedTimeAve, mf.ElapsedTimeMax));
 
                 mf.Reset();
                 Test.Log("----------");
@@ -71,7 +72,7 @@ namespace SortAlgo
         /// Show result with good format
         /// </summary>
         /// <param name="results">list for showing</param>
-        private static void ShowResult(FuncType funcMap, List<double> results)
+        private static void ShowResult(FuncType funcMap, List<Tuple<double, long>> results)
         {
             for (int i = 0; i < results.Count; i++)
             {
@@ -79,11 +80,12 @@ namespace SortAlgo
                 string result
                     = ($"{funcMap.Keys.ToArray()[i]}").PadRight(maxKeyLen)
                     + " :"
-                    + ($"{results[i]:F1} [ms]").PadLeft(13);
+                    + ($"{results[i].Item1:F1} [ms]").PadLeft(13);
                 Console.Write(result + " |");
 
-                int count = Math.Max((int)Math.Log(results[i], 1.2), 0);
-                Console.WriteLine(("").PadLeft(count, '#'));
+                int ave = Math.Max((int)Math.Log(results[i].Item1, 1.2), 0);
+                int max = Math.Max((int)Math.Log(results[i].Item2, 1.2), 0);
+                Console.WriteLine(("").PadRight(ave, '#').PadRight(max) + "|");
             }
         }
         
