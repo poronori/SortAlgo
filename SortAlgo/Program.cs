@@ -8,6 +8,13 @@ namespace SortAlgo
 {
     using FuncType = Dictionary<string, Action>;
 
+    class Defs
+    {
+        public const int Repeat = 5;
+        public const bool ShowLog = true;
+        public const bool ShowDebugLog = false;
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -32,6 +39,9 @@ namespace SortAlgo
                 { "Insertion 100", BindChecking(SortAlgos.InsertionSort, 100) },
                 { "Insertion 1000", BindChecking(SortAlgos.InsertionSort, 1000) },
                 { "Insertion 10000", BindChecking(SortAlgos.InsertionSort, 10000) },
+                { "Shell 100", BindChecking(SortAlgos.ShellSort, 100) },
+                { "Shell 1000", BindChecking(SortAlgos.ShellSort, 1000) },
+                { "Shell 10000", BindChecking(SortAlgos.ShellSort, 10000) },
             };
 
             MeasureFuncs(funcMap, out List<Tuple<double, long>> results);
@@ -49,6 +59,7 @@ namespace SortAlgo
         private static void MeasureFuncs(FuncType funcMap, out List<Tuple<double, long>> results)
         {
             MeasureFunction mf = new MeasureFunction();
+            mf.Repeat = Defs.Repeat;
 
             results = new List<Tuple<double, long>>();
             foreach (var pair in funcMap)
@@ -99,12 +110,64 @@ namespace SortAlgo
     class Test
     {
         public static Action<string> Log
-            = (message) => { if (true) Console.WriteLine(message); };
+            = (message) => { if (Defs.ShowLog) Console.WriteLine(message); };
+
+        public static void DubugLog(string logString)
+        {
+            if (Defs.ShowDebugLog)
+                Console.WriteLine(logString);
+        }
+
+        /// <summary>
+        /// Write debug log into Console with color (for internal)
+        /// </summary>
+        /// <param name="logData">log data with color info</param>
+        private static void DubugLog(List<Tuple<String, ConsoleColor>> logData)
+        {
+            if (Defs.ShowDebugLog)
+            {
+                logData.ForEach(pair =>
+                {
+                    ConsoleColor prevColor = Console.ForegroundColor;
+                    Console.ForegroundColor = pair.Item2;
+                    Console.Write(pair.Item1);
+                    Console.ForegroundColor = prevColor;
+                });
+                Console.WriteLine();
+            }
+        }
+
+        /// <summary>
+        /// Show elements as one line.
+        /// </summary>
+        /// <param name="list">target list</param>
+        public static void ShowListElements(List<int> list, Func<int, bool> enhanceCondition, string prefix = "")
+        {
+            List<Tuple<String, ConsoleColor>> debugData
+                = new List<Tuple<string, ConsoleColor>>();
+
+            List<Tuple<string, ConsoleColor>> newList = list.Select((elem, index) =>
+            {
+                string text = $"{elem} ";
+                ConsoleColor color = ConsoleColor.Gray;
+                if (enhanceCondition(index))
+                {
+                    color = ConsoleColor.Red;
+                }
+                if ((index + 1) % 20 == 0) text += Environment.NewLine + ("").PadLeft(prefix.Length);
+                return new Tuple<string, ConsoleColor>(text, color);
+            }).ToList();
+
+            newList.Insert(0, new Tuple<string, ConsoleColor>(prefix, ConsoleColor.White));
+            Test.DubugLog(newList);
+        }
+
+        public static bool AlwaysFalse(int elem) { return false; }
 
         /// <summary>
         /// It takes about 500ms.
         /// </summary>
-        private static void TestFunc()
+        public static void TestFunc()
         {
             Random random = new Random();
             for (int i = 0; i < 10; i++)
