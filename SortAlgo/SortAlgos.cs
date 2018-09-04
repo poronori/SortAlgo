@@ -217,6 +217,61 @@ namespace SortAlgo
             return list;
         }
 
+        /// <summary>
+        /// Shell sort O(n*log(n))
+        /// - Define h; average is O(n^1.25) when you choose the max number of (3^i - 1)/2 where h is less than n/9.
+        /// - Apply the insertion sort to picked up items at intervals of h.
+        /// - Update h; h /= 2
+        /// - Repeat the all above until 
+        /// </summary>
+        /// <param name="list">sort target list</param>
+        /// <returns>sorted list</returns>
+        public static List<int> ShellSort(List<int> list)
+        {
+            // h = the max number of (3^i - 1)/2 where h < n/9
+            // => i < log3(2/9 * n + 1)
+            int i = (int)Math.Log(2 * list.Count / 9 + 1, 3);
+            int h = (int)(Math.Pow(3, i) - 1) / 2;
+            while(h >= 1)
+            {
+                // The iterator of this loop is the first item of each picked up items.
+                // e.g. when an element whose index is k is A_k and h = 4
+                // Gorups of picked up items are:
+                // {A_0, A_4, A_8, ...}
+                // {A_1, A_5, A_9, ...}
+                // {A_2, A_6, A_10, ...}
+                // {A_3, A_7, A_11, ...}
+                // And this loop iterator indicates A_0, A_1, A_2, A_3.
+                for (int j = 0; j < h; j++)
+                {
+                    //Test.ShowListElements(list, (index) => index % h == j, $"{j}".PadRight(4));
+                    // Apply the insertion sort each groups
+                    for (int k = j + h; k < list.Count; k += h)
+                    {
+                        int currentItem = list[k];
+                        int l = k;
+                        for (; l >= h; l -= h)
+                        {
+                            if (list[l - h] > currentItem)
+                            {
+                                list[l] = list[l - h];
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                        list[l] = currentItem;
+                    }
+                    //Test.ShowListElements(list, (index) => index % h == j, $"=>".PadRight(4));
+                }
+
+                // Update h
+                h = (h - 1) / 3;
+            }
+            return list;
+        }
+
         #endregion 
 
         #region Utils
@@ -248,17 +303,6 @@ namespace SortAlgo
         }
 
         /// <summary>
-        /// Show elements as one line.
-        /// </summary>
-        /// <param name="list">target list</param>
-        private static void ShowListElements(List<int> list)
-        {
-            string output = list.Aggregate("", (str, elem) => $"{str}, {elem}");
-            output = output.Remove(0, 2);
-            Console.WriteLine($"result = {output}");
-        }
-
-        /// <summary>
         /// Check if elements is sorted correctly.
         /// </summary>
         /// <param name="list">target list</param>
@@ -267,7 +311,7 @@ namespace SortAlgo
             bool result = true;
             for(int i=1; i<list.Count; i++)
             {
-                if(list[i - 1] > list[i])
+                if (list[i - 1] > list[i] || list[i - 1] == list[i])
                 {
                     result = false;
                     break;
