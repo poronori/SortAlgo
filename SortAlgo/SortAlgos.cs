@@ -272,6 +272,41 @@ namespace SortAlgo
             return list;
         }
 
+        public static List<int> ShellSort2(List<int> list)
+        {
+            // h = the max number of (3^i - 1)/2 where h < n/9
+            // => i < log3(2/9 * n + 1)
+            int i = (int)Math.Log(2 * list.Count / 9 + 1, 3);
+            int h = (int)(Math.Pow(3, i) - 1) / 2;
+            while (h > 0)
+            {
+                for (int j = h; j < list.Count; j++)
+                {
+                    //Test.ShowListElements(list, (index) => index <= j && index % h == j % h, $"{j})".PadRight(4));
+                    // Apply the insertion sort each groups
+                    int currentItem = list[j];
+                    int l = j;
+                    for (; l >= h; l -= h)
+                    {
+                        if (list[l - h] > currentItem)
+                        {
+                            list[l] = list[l - h];
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    list[l] = currentItem;
+                    //Test.ShowListElements(list, (index) => index <= j && index % h == j % h, $"=>".PadRight(4));
+                }
+
+                // Update h
+                h = (h - 1) / 3;
+            }
+            return list;
+        }
+
         #endregion 
 
         #region Utils

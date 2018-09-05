@@ -12,7 +12,6 @@ namespace SortAlgo
     {
         public const int Repeat = 5;
         public const bool ShowLog = true;
-        public const bool ShowDebugLog = false;
     }
 
     class Program
@@ -42,6 +41,9 @@ namespace SortAlgo
                 { "Shell 100", BindChecking(SortAlgos.ShellSort, 100) },
                 { "Shell 1000", BindChecking(SortAlgos.ShellSort, 1000) },
                 { "Shell 10000", BindChecking(SortAlgos.ShellSort, 10000) },
+                { "Shell2 100", BindChecking(SortAlgos.ShellSort2, 100) },
+                { "Shell2 1000", BindChecking(SortAlgos.ShellSort2, 1000) },
+                { "Shell2 10000", BindChecking(SortAlgos.ShellSort2, 10000) },
             };
 
             MeasureFuncs(funcMap, out List<Tuple<double, long>> results);
@@ -114,7 +116,7 @@ namespace SortAlgo
 
         public static void DubugLog(string logString)
         {
-            if (Defs.ShowDebugLog)
+            if (Defs.ShowLog)
                 Console.WriteLine(logString);
         }
 
@@ -124,7 +126,7 @@ namespace SortAlgo
         /// <param name="logData">log data with color info</param>
         private static void DubugLog(List<Tuple<String, ConsoleColor>> logData)
         {
-            if (Defs.ShowDebugLog)
+            if (Defs.ShowLog)
             {
                 logData.ForEach(pair =>
                 {
