@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SortAlgo
 {
-    class SortAlgos
+    public class SortAlgos
     {
         /// <summary>
         /// Check given sort algorithm is correct.
@@ -16,10 +16,7 @@ namespace SortAlgo
         public static void CheckSortAlgo(Func<List<int>, List<int>> func, int numOfElem)
         {
             var list = GetRandomList(numOfElem);
-
             list = func(list);
-
-            CheckListElements(list);
         }
 
         #region sort algorithm
@@ -218,7 +215,7 @@ namespace SortAlgo
         }
 
         /// <summary>
-        /// Shell sort O(n*log(n))
+        /// Shell sort O(n*log(n)^2)
         /// - Define h; average is O(n^1.25) when you choose the max number of (3^i - 1)/2 where h is less than n/9.
         /// - Apply the insertion sort to picked up items at intervals of h.
         /// - Update h; h /= 2
@@ -307,6 +304,70 @@ namespace SortAlgo
             return list;
         }
 
+        /// <summary>
+        /// Merge sort O(n*log(n))
+        /// - Devide given list into two lists.
+        /// - If the devided list size is 2 or 1, sort it.
+        /// - Otherwise, do the same operation recursively and merge returned list.
+        /// - 'Merge' means comparing two min index items and set less one into result list sequentially.
+        /// </summary>
+        /// <param name="list">sort target list</param>
+        /// <returns>sorted list</returns>
+        public static List<int> MergeSort(List<int> list)
+        {
+            list = new List<int>(MergeSortInternal(list.ToArray()));
+            return list;
+        }
+
+        private static int[] MergeSortInternal(int[] list)
+        {
+            int lastIndex = list.Length;
+
+            if (lastIndex > 2)
+            {
+                int middleIndex = list.Count() / 2;
+
+                int[] firstList = new int[middleIndex];
+                int[] secondList = new int[lastIndex - middleIndex];
+                for (int i = 0; i < middleIndex ; i++)
+                {
+                    firstList[i] = list[i];
+                    secondList[i] = list[i + middleIndex];
+                }
+                if (lastIndex % 2 == 1)
+                    secondList[middleIndex] = list[lastIndex - 1];
+
+                // recursive call => sort them
+                firstList = MergeSortInternal(firstList);
+                secondList = MergeSortInternal(secondList);
+
+                int currentFirstIndex = 0;
+                int currentSecondIndex = 0;
+                for (int i = 0; i < lastIndex; i++)
+                {
+                    if (currentSecondIndex == secondList.Length || currentFirstIndex < firstList.Length && firstList[currentFirstIndex] < secondList[currentSecondIndex])
+                    {
+                        list[i] = firstList[currentFirstIndex++];
+                    }
+                    else
+                    {
+                        list[i] = secondList[currentSecondIndex++];
+                    }
+                }
+                return list;
+            }
+            else if (lastIndex == 2)
+            {
+                if (list[0] > list[1])
+                    Swap(ref list[0], ref list[1]);
+                return list;
+            }
+            else // lastIndex == 1
+            {
+                return list;
+            }
+        }
+
         #endregion 
 
         #region Utils
@@ -366,6 +427,18 @@ namespace SortAlgo
             int temp = list[index1];
             list[index1] = list[index2];
             list[index2] = temp;
+        }
+
+        /// <summary>
+        /// Swap 2 items.
+        /// </summary>
+        /// <param name="item1">one item</param>
+        /// <param name="item2">another item</param>
+        private static void Swap(ref int item1, ref int item2)
+        {
+            int temp = item1;
+            item1 = item2;
+            item2 = temp;
         }
 
         #endregion
