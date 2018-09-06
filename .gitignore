@@ -1,3 +1,4 @@
 .vs
-SortAlgo/bin
-SortAlgo/obj
+bin
+obj
+packages
