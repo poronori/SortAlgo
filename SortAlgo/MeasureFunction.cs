@@ -40,7 +40,10 @@ namespace SortAlgo
                     sw.Start();
                     func();
                     sw.Stop();
-                    ElapsedTimes.Add(sw.ElapsedMilliseconds);
+                    lock (ElapsedTimes)
+                    {
+                        ElapsedTimes.Add(sw.ElapsedMilliseconds);
+                    }
                 }));
                 tasks.Last().Start();
             }

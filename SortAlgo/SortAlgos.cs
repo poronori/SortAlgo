@@ -269,6 +269,11 @@ namespace SortAlgo
             return list;
         }
 
+        /// <summary>
+        /// Shell sort 2
+        /// </summary>
+        /// <param name="list">sort target list</param>
+        /// <returns>sorted list</returns>
         public static List<int> ShellSort2(List<int> list)
         {
             // h = the max number of (3^i - 1)/2 where h < n/9
@@ -368,6 +373,13 @@ namespace SortAlgo
             }
         }
 
+        /// <summary>
+        /// Merge sort 2
+        /// If the number of list elements becomes less than 100,
+        /// sort them by insertion sort.
+        /// </summary>
+        /// <param name="list">sort target list</param>
+        /// <returns>sorted list</returns>
         public static List<int> MergeSort2(List<int> list)
         {
             list = new List<int>(MergeSort2Internal(list.ToArray()));
@@ -417,6 +429,17 @@ namespace SortAlgo
             }
         }
 
+        /// <summary>
+        /// Quick sort O(n*log(n))
+        /// - Define P by using some picked up elements.
+        /// - Look for less number than P from left side.
+        /// - Look for not less number than P from right side.
+        /// - If both are found then swap them.
+        /// - If both searching cross without finding both then this session is finished.
+        /// - Do the same operation recursively with new range, less than P and not less than P, until new range is one.
+        /// </summary>
+        /// <param name="list">sort target list</param>
+        /// <returns>sorted list</returns>
         public static List<int> QuickSort(List<int> list)
         {
             QuickSortInternal(ref list, 0, list.Count - 1);
