@@ -368,6 +368,127 @@ namespace SortAlgo
             }
         }
 
+        public static List<int> MergeSort2(List<int> list)
+        {
+            list = new List<int>(MergeSort2Internal(list.ToArray()));
+            return list;
+        }
+
+        private static int[] MergeSort2Internal(int[] list)
+        {
+            int lastIndex = list.Length;
+
+            if (lastIndex >= 100)
+            {
+                int middleIndex = list.Count() / 2;
+
+                int[] firstList = new int[middleIndex];
+                int[] secondList = new int[lastIndex - middleIndex];
+                for (int i = 0; i < middleIndex; i++)
+                {
+                    firstList[i] = list[i];
+                    secondList[i] = list[i + middleIndex];
+                }
+                if (lastIndex % 2 == 1)
+                    secondList[middleIndex] = list[lastIndex - 1];
+
+                // recursive call => sort them
+                firstList = MergeSort2Internal(firstList);
+                secondList = MergeSort2Internal(secondList);
+
+                int currentFirstIndex = 0;
+                int currentSecondIndex = 0;
+                for (int i = 0; i < lastIndex; i++)
+                {
+                    if (currentSecondIndex == secondList.Length || currentFirstIndex < firstList.Length && firstList[currentFirstIndex] < secondList[currentSecondIndex])
+                    {
+                        list[i] = firstList[currentFirstIndex++];
+                    }
+                    else
+                    {
+                        list[i] = secondList[currentSecondIndex++];
+                    }
+                }
+                return list;
+            }
+            else // lastIndex == 1
+            {
+                return InsertionSort(new List<int>(list)).ToArray();
+            }
+        }
+
+        public static List<int> QuickSort(List<int> list)
+        {
+            QuickSortInternal(ref list, 0, list.Count - 1);
+            return list;
+        }
+
+        private static void QuickSortInternal(ref List<int> list, int first, int last)
+        {
+            int count = last - first + 1;
+            if (count > 2)
+            {
+                int middle = first + (last - first) / 2;
+                int pickUpSum = list[first] + list[middle] + list[last];
+                int P = pickUpSum / 3;
+
+                bool leftIsDefined = false;
+                bool rightIsDefined = false;
+                int leftIndex = first;
+                int rightIndex = last;
+                for (int i = 0; i <= last; i++)
+                {
+                    // Search index
+                    if (!leftIsDefined && P <= list[leftIndex++])
+                    {
+                        leftIsDefined = true;
+                    }
+                    if (!rightIsDefined && P > list[rightIndex--])
+                    {
+                        rightIsDefined = true;
+                    }
+
+                    // Swap condition
+                    if (leftIsDefined && rightIsDefined)
+                    {
+                        SwapListElements(ref list, leftIndex - 1, rightIndex + 1);
+                        leftIsDefined = rightIsDefined = false;
+                    }
+
+                    // Finish condition
+                    if (leftIndex > rightIndex)
+                    {
+                        break;
+                    }
+                }
+
+                int nextFirst1 = first;
+                int nextLast2 = last;
+                int nextLast1 = -1;
+                int nextFirst2 = -1;
+                for (int i = first; i <= last; i++)
+                {
+                    if (list[i] >= P)
+                    {
+                        nextLast1 = i - 1;
+                        nextFirst2 = i;
+                        break;
+                    }
+                }
+                QuickSortInternal(ref list, nextFirst1, nextLast1);
+                QuickSortInternal(ref list, nextFirst2, nextLast2);
+            }
+            else if (count == 2)
+            {
+                if (list[first] > list[last])
+                    SwapListElements(ref list, first, last);
+            }
+            else
+            {
+                /* do nothing */
+            }
+        }
+
         #endregion 
 
         #region Utils

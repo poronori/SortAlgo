@@ -66,6 +66,11 @@ namespace TestSortAlgo
         public void Test_Shell()
         {
             Test_SortAlgo(SortAlgo.SortAlgos.ShellSort);
+        }
+
+        [TestMethod]
+        public void Test_Shell2()
+        {
             Test_SortAlgo(SortAlgo.SortAlgos.ShellSort2);
         }
 
@@ -73,6 +78,18 @@ namespace TestSortAlgo
         public void Test_Merge()
         {
             Test_SortAlgo(SortAlgo.SortAlgos.MergeSort);
+        }
+
+        [TestMethod]
+        public void Test_Merge2()
+        {
+            Test_SortAlgo(SortAlgo.SortAlgos.MergeSort2);
+        }
+
+        [TestMethod]
+        public void Test_Quick()
+        {
+            Test_SortAlgo(SortAlgo.SortAlgos.QuickSort);
         }
     }
 }

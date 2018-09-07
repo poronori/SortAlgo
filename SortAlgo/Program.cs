@@ -47,6 +47,12 @@ namespace SortAlgo
                 { "Merge 100", BindChecking(SortAlgos.MergeSort, 100) },
                 { "Merge 1000", BindChecking(SortAlgos.MergeSort, 1000) },
                 { "Merge 10000", BindChecking(SortAlgos.MergeSort, 10000) },
+                { "Merge2 100", BindChecking(SortAlgos.MergeSort2, 100) },
+                { "Merge2 1000", BindChecking(SortAlgos.MergeSort2, 1000) },
+                { "Merge2 10000", BindChecking(SortAlgos.MergeSort2, 10000) },
+                { "Quick 100", BindChecking(SortAlgos.QuickSort, 100) },
+                { "Quick 1000", BindChecking(SortAlgos.QuickSort, 1000) },
+                { "Quick 10000", BindChecking(SortAlgos.QuickSort, 10000) },
             };
 
             MeasureFuncs(funcMap, out List<Tuple<double, long>> results);
