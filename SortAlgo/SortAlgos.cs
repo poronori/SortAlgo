@@ -215,6 +215,30 @@ namespace SortAlgo
         }
 
         /// <summary>
+        /// Gnome sort O(n^2)
+        /// </summary>
+        /// <param name="list">sort target list</param>
+        /// <returns>sorted list</returns>
+        public static List<int> GnomeSort(List<int> list)
+        {
+            int i = 1;
+            while (i < list.Count)
+            {
+                // Insert the current item into its appropreate position of already checked items
+                if (i > 0 && list[i] < list[i - 1])
+                {
+                    SwapListElements(ref list, i, i - 1);
+                    i--;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return list;
+        }
+
+        /// <summary>
         /// Shell sort O(n*log(n)^2)
         /// - Define h; average is O(n^1.25) when you choose the max number of (3^i - 1)/2 where h is less than n/9.
         /// - Apply the insertion sort to picked up items at intervals of h.

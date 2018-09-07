@@ -63,6 +63,12 @@ namespace TestSortAlgo
         }
 
         [TestMethod]
+        public void Test_Gnome()
+        {
+            Test_SortAlgo(SortAlgo.SortAlgos.GnomeSort);
+        }
+
+        [TestMethod]
         public void Test_Shell()
         {
             Test_SortAlgo(SortAlgo.SortAlgos.ShellSort);
